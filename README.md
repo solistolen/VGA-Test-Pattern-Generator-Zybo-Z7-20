@@ -71,7 +71,8 @@ Vivado's generated output folders (`.cache`, `.runs`, `.ip_user_files`, `.sim`) 
 2. Run **Generate Bitstream**, or program the board with the included `VGA_BD_wrapper.bit`.
 3. In Vitis, create a platform project from `VGA_BD_Patterns_wrapper.xsa` with a standalone domain on `ps7_cortexa9_0`.
 4. Create an empty C application on that platform. Copy the files from `software/VGA_Patterns/src/` into its `src/` folder.
-5. Build the application, program the FPGA, and run it. Open a serial terminal at 115200 baud to see the pattern messages.
+5. Build the application, program the FPGA, and run it.
+6. To see the pattern messages, open a serial terminal on the board's USB-UART COM port at 115200 baud, 8 data bits, no parity, 1 stop bit. We used **Tera Term 5**: go to *File → New connection → Serial*, pick the Zybo's COM port, then set the speed under *Setup → Serial port*.
 
 ### Known issue: Vivado VTC / HLS bug (y2k22)
 
