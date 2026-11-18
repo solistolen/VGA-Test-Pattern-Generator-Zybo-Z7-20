@@ -1,0 +1,11 @@
+# Vivado generated / regenerable output
+*.cache/
+*.runs/
+*.ip_user_files/
+*.sim/
+*.gen/
+.Xil/
+*.jou
+*.log
+*.str
+*.zip
