@@ -27,7 +27,22 @@ The design is a Vivado block design (`VGA_BD`) built from these IP cores:
 - Processor System Reset
 - AXI GPIO (switch input)
 
-The Zynq PS runs software written in Xilinx SDK / Vitis. It initializes the TPG and VTC and switches patterns based on the switch inputs.
+The Zynq PS runs software written in Xilinx SDK / Vitis. It initializes the TPG and VTC at 1920×1080 and changes the pattern whenever the switches change. Each pattern change is also printed over UART.
+
+## Switch controls
+
+The four slide switches (SW3–SW0) select the pattern:
+
+| SW3 SW2 SW1 SW0 | Pattern |
+|:---:|---|
+| 0000 | Standard color bars |
+| 0001 | Rainbow color |
+| 0010 | Horizontal gradient |
+| 0011 | Tartan color bars |
+| 0100 | Cross hatch |
+| 0101 | Vertical gradient |
+| 1000 | Checkerboard |
+| any other | Color bars (fallback) |
 
 ## Repository layout
 
@@ -39,6 +54,9 @@ VGA_TPG/
   VGA_BD_wrapper.xsa            Hardware export for Vitis
   VGA_BD_Patterns_wrapper.xsa   Hardware export (multi-pattern version)
   ps7_init.*                    Zynq PS initialization files
+software/
+  VGA_Patterns/src/             Final Vitis app: switch-controlled TPG patterns
+  VGA_TPG_cycle/src/            Earlier test app: cycles patterns over GPIO every 2 s
 constraints/
   Zybo-Z7-Master.xdc            Pin constraints (reset button, VGA Pmod JC/JD)
 docs/
@@ -51,7 +69,9 @@ Vivado's generated output folders (`.cache`, `.runs`, `.ip_user_files`, `.sim`) 
 
 1. Open `VGA_TPG/VGA_TPG.xpr` in Vivado (the project was built with 2020.2).
 2. Run **Generate Bitstream**, or program the board with the included `VGA_BD_wrapper.bit`.
-3. In Vitis, create a platform from `VGA_BD_wrapper.xsa`, add the application code, and run it on the board.
+3. In Vitis, create a platform project from `VGA_BD_Patterns_wrapper.xsa` with a standalone domain on `ps7_cortexa9_0`.
+4. Create an empty C application on that platform. Copy the files from `software/VGA_Patterns/src/` into its `src/` folder.
+5. Build the application, program the FPGA, and run it. Open a serial terminal at 115200 baud to see the pattern messages.
 
 ### Known issue: Vivado VTC / HLS bug (y2k22)
 
